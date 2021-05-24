@@ -85,7 +85,7 @@
                 <label class="label text" for="salary">Salary</label>
                 <input class="input" type="range" name="salary" id="salary" min="300000" 
                         max="500000" step="100" value="4000000">
-                <output class="salary-output text" for="salary">400000</output> 
+                <output class="salary-output" for="salary">400000</output> 
             </div>
 
             <!--UC5 Ability to specify the start date with Day, Month and year as Select Input Item-->
@@ -162,5 +162,16 @@
             </div>
         </form>
     </div>
+
+
+<!--java script-->
+<script>
+    const salary = document.querySelector('#salary');       /*JS code for slider*/
+        const output = document.querySelector('.salary-output');
+        output.textContent = salary.value;
+        salary.addEventListener('input', function(){
+            output.textContent = salary.value;
+        });
+</script>
 </body>
 </html>

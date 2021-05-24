@@ -164,6 +164,12 @@ select{
     text-align: center;
 }
 
+error-output{
+    font-size: 15px;
+    font-style: italic;
+    color: red;
+}
+
 /*Adding media queries*/
 
 @media only screen and (max-width: 600px){

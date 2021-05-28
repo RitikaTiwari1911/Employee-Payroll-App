@@ -19,8 +19,8 @@
     </div>
     </header>
     <!--UC2 Employee Payroll Form with Header and Name-->
-    <div class="form-content">
-        <form class="form" action="#" onsubmit="save();return fallse">
+    <div id="formId" class="form-content">
+        <form class="form" action="#" onreset="resetForm()" onsubmit="save()">
             <div class="form-head">
                 Employee Payroll Form
             </div>
@@ -29,8 +29,6 @@
                 <label class="label text" for="name">Name</label>
                 <input class="input" type="text" id="name" name="name" placeholder="Your name..." required>
                 <error-output class="text-error" for="text"></error-output>
-                
-            
             </div>
 
             <!--UC3 Adding profile pictures-->
@@ -167,25 +165,8 @@
     </div>
 
 
-<!--java script-->
-<!--UC 8 Applying event Listener to the salary slider-->
-<script>
-    const salary = document.querySelector('#salary');       /*JS code for slider*/
-        const output = document.querySelector('.salary-output');
-        output.textContent = salary.value;
-        salary.addEventListener('input', function(){
-            output.textContent = salary.value;
-        });
-
-        /*UC 10 Validating name*/
-        const text = document.querySelector('#name');       /*JS code for the validation of name*/
-        const textError = document.querySelector('.text-error');
-        text.addEventListener('input',function(){
-            let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');      /*Regex for name*/
-            if(nameRegex.test(text.value))
-                textError.textContent = "";
-            else textError.textContent = "Name is incorrect";
-        });
-</script>
+    <!--java script-->
+    <script src="EmployeePayroll.js"></script>
+    <script src ="payrollForm.js"></script>
 </body>
 </html>

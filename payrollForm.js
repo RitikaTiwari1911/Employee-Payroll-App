@@ -46,7 +46,8 @@ window.addEventListener('DOMContentLoaded',(event) =>{
 //On save create Employee payroll Object
 const save = () => {
     try{
-        let EmployeePayrollData = createEmployeePayroll();
+        let employeePayrollData = createEmployeePayroll();
+        createAndUpdateStorage(employeePayrollData);
     }catch (e){
         return;
     }
@@ -82,9 +83,21 @@ const save = () => {
     return selectItems;
 }
 
-    //function to get form values by Id
-    const getInputValueById = (id=>{
+//function to get form values by Id
+const getInputValueById = (id=>{
     let value = document.querySelector(id).value;
     return value;  
     });
+
+//UC12(4) Ability to save the Employee payroll object to Local Storage
+function createAndUpdateStorage(employeePayrollData){
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    if(employeePayrollList != undefined){
+        employeePayrollList.push(employeePayrollData);
+    }else{
+        employeePayrollList = [employeePayrollData];
+    }
+    alert(employeePayrollList.toString());
+    localStorage.setItem("EmployeePayrollList",JSON.stringify(employeePayrollList));
+}
 }

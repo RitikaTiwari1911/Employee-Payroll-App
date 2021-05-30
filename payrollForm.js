@@ -1,25 +1,28 @@
-//UC 9 On Document load set event Listeners
-window.addEventListener('DOMContentLoaded',(event) =>{
+//add event listener when document gets loaded
+window.addEventListener('DOMContentLoaded',()=>{
+    var employeePayrollData = new EmployeePayrollData();
     const name = document.querySelector('#name');
     const textError = document.querySelector('.text-error');
-    name.addEventListener('input',function(){
+    name.addEventListener('input',function(){        //add listener at name input
         if(name.value.length == 0){
-            textError.textContent = "";
+            textError.textContent="";
             return;
         }
         try{
-            (new EmployeePayrollData()).name = name.value;
+            employeePayrollData.name = name.value;
             textError.textContent = "";
         }catch(e){
             textError.textContent = e;
-        }    
+        }
     });
+
     const salary = document.querySelector('#salary');
-    const output = document.querySelector('.salary-output');
-    output.textContent = salary.value;
-    salary.addEventListener('input',function(){
-        output.textContent = salary.value;
-    });
+    const outputSalary = document.querySelector('.salary-output');
+    outputSalary.textContent = salary.value;
+    salary.addEventListener('input',function(){       //add listener at salary input
+          outputSalary.textContent = salary.value;
+        });
+
     const day = document.querySelector('#day');
     const month = document.querySelector('#month');
     const year = document.querySelector('#year');
@@ -41,27 +44,27 @@ window.addEventListener('DOMContentLoaded',(event) =>{
             })
         })
     });
-}); 
+});
 
-//On save create Employee payroll Object
-const save = () => {
+//save function called on submit
+const save = ()=> {
     try{
         let employeePayrollData = createEmployeePayroll();
         createAndUpdateStorage(employeePayrollData);
-    }catch (e){
+    }catch(e){
         return;
     }
+}
 
-    const createEmployeePayroll = () => {
-        let employeePayrollData = new EmployeePayrollData();
+//function to populate employee object with html form data
+const createEmployeePayroll = ()=> {
+    let employeePayrollData = new EmployeePayrollData();
     try {
         employeePayrollData.name = getInputValueById('#name');
     }catch(e){
         setTextValue('.text-error',e);
         throw e;
     }
-
-    //helper methods for multiple inputs
     employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
     employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
     employeePayrollData.department = getSelectedValues('[name=department]');
@@ -73,8 +76,8 @@ const save = () => {
     alert(employeePayrollData.toString());
     return employeePayrollData;
 }
-    //function to get html form values of radio buttons  
-    const getSelectedValues = (propertyValue)=>{
+//function to get html form values of radio buttons  
+const getSelectedValues = (propertyValue)=>{
     let allItems = document.querySelectorAll(propertyValue);
     let selectItems = [];
     allItems.forEach(item=>{
@@ -86,20 +89,8 @@ const save = () => {
 //function to get form values by Id
 const getInputValueById = (id=>{
     let value = document.querySelector(id).value;
-    return value;  
-    });
-
-//UC12(4) Ability to save the Employee payroll object to Local Storage
-function createAndUpdateStorage(employeePayrollData){
-    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-    if(employeePayrollList != undefined){
-        employeePayrollList.push(employeePayrollData);
-    }else{
-        employeePayrollList = [employeePayrollData];
-    }
-    alert(employeePayrollList.toString());
-    localStorage.setItem("EmployeePayrollList",JSON.stringify(employeePayrollList));
-}
+    return value;
+});
 
 //create and update local storage with employee payroll object
 function createAndUpdateStorage(employeePayrollData){
@@ -141,5 +132,4 @@ const setTextValue = (id, value) => {
 const setValue=(id,value)=>{
     const element = document.querySelector(id);
     element.value = value;
-}
 }

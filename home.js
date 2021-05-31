@@ -1,14 +1,17 @@
-window.addEventListener('DOMContentLoaded', () => {
+let employeeePayrollList;
+window.addEventListener('DOMContentLoaded', (event) => {
+    employeePayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = employeePayrollList.length;
     createInnerHTML();
+    localStorage.removeItem('editEmp');
 });
 
-//Template literal ES6 feature 
 const createInnerHTML = () => {
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th>"+
                        "<th>Salary</th><th>start Date</th><th>Actions</th>";
+    if ( employeePayrollList.length == 0 ) return;
     let innerHtml = `${headerHtml}`;
-    let employeePayrollList = createEmployeePayrollJSON();
-
+    
     for  ( const employeePayrollData of employeePayrollList){
         innerHtml = `${innerHtml}
          <tr>
@@ -19,51 +22,27 @@ const createInnerHTML = () => {
              <td>${employeePayrollData._gender}</td>
              <td>${getDeptHtml(employeePayrollData._department)}</td>
              <td>${employeePayrollData._salary}</td>
-             <td>${employeePayrollData._startDate}</td>
+             <td>${stringifyDate(employeePayrollData._startDate)}</td>
              <td> 
-                 <img name="${employeePayrollData._id}" onclick="remove(this)" alt="delete" src="../FS HTML_CSS LP02 Employee Payroll App Assets.zip (Unzipped Files)/assets/icons/delete-black-18dp.svg">
-                 <img name="${employeePayrollData._id}" alt="Edit" onclick="update(this)" src="../FS HTML_CSS LP02 Employee Payroll App Assets.zip (Unzipped Files)/assets/icons/create-black-18dp.svg">
-             </td>
+                 <img id="${employeePayrollData._id}" onclick ="remove(this)" alt="delete" src="../FS HTML_CSS LP02 Employee Payroll App Assets.zip (Unzipped Files)/assets/icons/delete-black-18dp.svg">
+                 <img id="${employeePayrollData._id}" alt="Edit" onclick="update(this)" src="../FS HTML_CSS LP02 Employee Payroll App Assets.zip (Unzipped Files)/assets/icons/create-black-18dp.svg">
+                 </td>
          </tr>
          `;
     }
      document.querySelector('#table-display').innerHTML=innerHtml;
 }
 
-//populate all department from department list
+
 const getDeptHtml = (deptList) => {
     let deptHtml = '';
-    for (const dept of deptList){
-        deptHtml = `${deptHtml} <div class ='dept-label'>${dept}</div>`
+    for(const dept of deptList){
+        deptHtml = `${deptHtml} <div class='dept-label'>${dept}</div>`
     }
     return deptHtml;
 }
 
-//create Employee Payroll JSON objects
-const createEmployeePayrollJSON = () => {
-    let employeePayrollList = [
-        {
-            _name : 'Tanya',
-            _gender : 'Female',
-            _department : ['Engineering' ,
-                           'Finance'],
-            _salary : '4000000',
-            _startDate : '1 April 2019',
-            _note : '',
-            _id : new Date().getTime(),
-            _profilePic : '../Ellipse -1.png'
-        },
-        {
-            _name : 'Ritika',
-            _gender : 'Female',
-            _department : ['HR' ,
-                           'Finance'],
-            _salary : '5000000',
-            _startDate : '1 March 2019',
-            _note : '',
-            _id : new Date().getTime() + 1,
-            _profilePic : '../Ellipse -4.png'
-        }
-    ];
-    return employeePayrollList;
+//UC-19
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('EmployeePayrollList') ? JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
 }

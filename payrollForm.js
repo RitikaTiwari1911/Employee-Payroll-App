@@ -23,20 +23,17 @@ window.addEventListener('DOMContentLoaded',()=>{
           outputSalary.textContent = salary.value;
         });
 
-    const day = document.querySelector('#day');
-    const month = document.querySelector('#month');
-    const year = document.querySelector('#year');
-    const yearsArray = ['January','February','March','April','May','June','July','August','September',
-                        'October','November','December'];
+    let day = document.querySelector('#day');
+    let month = document.querySelector('#month');
+    let year = document.querySelector('#year');
     const dateError = document.querySelector('.date-error');
 
     day.addEventListener('click',function(){            //add listener at date input
         month.addEventListener('click',function(){
             year.addEventListener('click',function(){
                 try{
-                    const startDate = new Date(year.value,yearsArray.indexOf(month.value),day.value);
-                    console.log(startDate);
-                    employeePayrollData.startDate = startDate;
+                    let date = day.value + " " + month.value + " " + year.value;
+                    employeePayrollData.startDate = new Date(Date.parse(date));
                     dateError.textContent = "";
                 }catch(e){
                     dateError.textContent = e;
@@ -70,27 +67,13 @@ const createEmployeePayroll = ()=> {
     employeePayrollData.department = getSelectedValues('[name=department]');
     employeePayrollData.salary = getInputValueById('#salary');
     employeePayrollData.note = getInputValueById('#notes');
-    let date = getInputValueById('#day') + " " + getInputValueById('#month')+
-               " "+getInputValueById('#year');
-    employeePayrollData.date = Date.parse(date);
+    let date = getInputValueById('#day')+" "+getInputValueById('#month')+" "+
+               getInputValueById('#year');
+    employeePayrollData.startDate = new Date(Date.parse(date));
+    employeePayrollData.id = employeePayrollData.startDate.getTime();
     alert(employeePayrollData.toString());
     return employeePayrollData;
 }
-//function to get html form values of radio buttons  
-const getSelectedValues = (propertyValue)=>{
-    let allItems = document.querySelectorAll(propertyValue);
-    let selectItems = [];
-    allItems.forEach(item=>{
-        if(item.checked) selectItems.push(item.value);
-    });
-    return selectItems;
-}
-
-//function to get form values by Id
-const getInputValueById = (id=>{
-    let value = document.querySelector(id).value;
-    return value;
-});
 
 //create and update local storage with employee payroll object
 function createAndUpdateStorage(employeePayrollData){
@@ -103,33 +86,21 @@ function createAndUpdateStorage(employeePayrollData){
     alert(employeePayrollList.toString());
     localStorage.setItem("EmployeePayrollList",JSON.stringify(employeePayrollList));
 }
-
-//reset form function to reset all elements in html form
-const resetForm = () =>{
-    setValue('#name','');
-    unsetSelectedValues('[name=profile]');
-    unsetSelectedValues('[name=gender]');
-    unsetSelectedValues('[name=department]');
-    setValue('#salary','');
-    setValue('#notes','');
-    setValue('#day','1');
-    setValue('#month','January');
-    setValue('#year','2021'); 
-}
-
-const unsetSelectedValues = (propertyValue)=>{
+const getSelectedValues=(propertyValue)=>{
     let allItems=document.querySelectorAll(propertyValue);
+    let selItems=[];
     allItems.forEach(item=>{
-        item.checked = false;
+        if(item.checked) selItems.push(item.value);
     });
+    return selItems;
 }
 
-const setTextValue = (id, value) => {
-    const element = document.querySelector(id);
-    element.textContent = value;
+const getInputValueById=(id)=>{
+    let value=document.querySelector(id).value;
+    return value;
 }
 
-const setValue=(id,value)=>{
-    const element = document.querySelector(id);
-    element.value = value;
+const getInputElementValue=(id)=>{
+    let value=document.getElementById(id).value;
+    return value;
 }
